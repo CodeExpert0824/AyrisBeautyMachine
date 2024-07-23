@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import useAuthStore from "../../store";
 
 export default function Home() {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -8,6 +9,10 @@ export default function Home() {
   const [squareBtnWidth, setSquareBtnWidth] = useState({ horizontal: 0, vertical: 0 });
   const [introBtn, setIntroBtnWidth] = useState({ horizontal: 0, vertical: 0 });
   const [commonBtn, setCommonBtn] = useState({ horizontal: 0, vertical: 0 });
+  const [mediumBtn, setMediumBtn] = useState({ horizontal: 0, vertical: 0 });
+  const [smallBtn, setSmallBtn] = useState({ horizontal: 0, vertical: 0 });
+
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   const updatePadding = () => {
     if (ref.current) {
@@ -16,6 +21,8 @@ export default function Home() {
       setSquareBtnWidth({ horizontal: ref.current.offsetWidth * 0.031, vertical: ref.current.offsetHeight * 0.012 });
       setIntroBtnWidth({ horizontal: ref.current.offsetWidth * 0.023, vertical: ref.current.offsetHeight * 0.0085 });
       setCommonBtn({ horizontal: ref.current.offsetWidth * 0.0385, vertical: ref.current.offsetHeight * 0.0043 });
+      setMediumBtn({ horizontal: ref.current.offsetWidth * 0.048, vertical: ref.current.offsetHeight * 0.0046 });
+      setSmallBtn({ horizontal: ref.current.offsetWidth * 0.032, vertical: ref.current.offsetHeight * 0.0043 });
     }
   };
 
@@ -55,9 +62,12 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center relative" ref={ref}>
-      <img src="/images/home-page.jpg" alt="background" />
+      <div className="relative">
+        {isAuthenticated ? <img src="/images/home-page_2.jpg" alt="background" /> : <img src="/images/home-page.jpg" alt="background" />}
+        <img src="/images/home.gif" alt="gif" className="absolute top-[30%] left-[18%]" width="63%" height="63%" />
+      </div>
       <img src="/images/counter.png" alt="counter" />
-      <img src="/images/counts.png" alt="counter" />
+      <img src="/images/counts.png" alt="counts" />
       <Link
         className="absolute top-[4.95%] left-[4.2%] bg-slate-400 opacity-10 hover:opacity-10"
         to='/home'
@@ -79,27 +89,32 @@ export default function Home() {
           padding: `${buildBtnSize.vertical}px ${buildBtnSize.horizontal}px`,
         }}
       />
-      <Link
-        className="absolute top-[4.95%] left-[90%] bg-slate-400 opacity-10 hover:opacity-10"
-        to='/register'
-        style={{
-          padding: `${authBtnWidth.vertical}px ${authBtnWidth.horizontal}px`,
-        }}
-      />
-      <Link
-        className="absolute top-[6.1%] left-[90%] bg-slate-400 opacity-10 hover:opacity-10"
-        to='/login'
-        style={{
-          padding: `${authBtnWidth.vertical}px ${authBtnWidth.horizontal}px`,
-        }}
-      />
-      {/* <Link
-        className="absolute top-[29.7%] left-[3.5%] bg-slate-400 opacity-10 hover:opacity-10"
-        to='/dear'
-        style={{
-          padding: `${commonBtn.vertical}px ${commonBtn.horizontal}px`,
-        }}
-      /> */}
+      {isAuthenticated ? <>
+        <Link
+          className="absolute top-[5%] left-[90%] bg-slate-400 opacity-10 hover:opacity-10"
+          to='/account'
+          style={{
+            padding: `${squareBtnWidth.vertical}px ${squareBtnWidth.horizontal}px`,
+          }}
+        />
+      </> : (
+        <>
+          <Link
+            className="absolute top-[5%] left-[90%] bg-slate-400 opacity-10 hover:opacity-10"
+            to='/register'
+            style={{
+              padding: `${authBtnWidth.vertical}px ${authBtnWidth.horizontal}px`,
+            }}
+          />
+          <Link
+            className="absolute top-[6.1%] left-[90%] bg-slate-400 opacity-10 hover:opacity-10"
+            to='/login'
+            style={{
+              padding: `${authBtnWidth.vertical}px ${authBtnWidth.horizontal}px`,
+            }}
+          />
+        </>
+      )}
       <Link
         className="absolute top-[10.1%] left-[3.5%] bg-slate-400 opacity-10 hover:opacity-10"
         to='/year'
@@ -122,6 +137,13 @@ export default function Home() {
         }}
       />
       <Link
+        className="absolute top-[13.9%] left-[3.5%] bg-slate-400 opacity-10 hover:opacity-10"
+        to='/philosphies'
+        style={{
+          padding: `${commonBtn.vertical}px ${commonBtn.horizontal}px`,
+        }}
+      />
+      <Link
         className="absolute top-[14.8%] left-[3.5%] bg-slate-400 opacity-10 hover:opacity-10"
         to='/muthology'
         style={{
@@ -129,10 +151,38 @@ export default function Home() {
         }}
       />
       <Link
+        className="absolute top-[21.4%] left-[4.3%] bg-slate-400 opacity-10 hover:opacity-10"
+        to='/manifesto'
+        style={{
+          padding: `${squareBtnWidth.vertical}px ${squareBtnWidth.horizontal}px`,
+        }}
+      />
+      <Link
+        className="absolute top-[23.9%] left-[20.3%] bg-slate-400 opacity-10 hover:opacity-10"
+        to='/edit-profile'
+        style={{
+          padding: `${mediumBtn.vertical}px ${mediumBtn.horizontal}px`,
+        }}
+      />
+      <Link
         className="absolute top-[23.6%] left-[47.8%] bg-slate-400 opacity-10 hover:opacity-10"
         to='/intro'
         style={{
           padding: `${introBtn.vertical}px ${introBtn.horizontal}px`,
+        }}
+      />
+      <Link
+        className="absolute top-[24%] left-[63%] bg-slate-400 opacity-10 hover:opacity-10"
+        to='/home'
+        style={{
+          padding: `${smallBtn.vertical}px ${smallBtn.horizontal}px`,
+        }}
+      />
+      <Link
+        className="absolute top-[21.4%] left-[90%] bg-slate-400 opacity-10 hover:opacity-10"
+        to='/third-dimension'
+        style={{
+          padding: `${squareBtnWidth.vertical}px ${squareBtnWidth.horizontal}px`,
         }}
       />
     </div>
