@@ -7,6 +7,10 @@
   background-color: #121419;
 }
 
+body {
+  font-family: 'OldLondon';
+}
+
 .logo {
   will-change: filter;
   transition: filter 300ms;
@@ -18,4 +22,9 @@
 
 .logo.react:hover {
   filter: drop-shadow(0 0 8em #61dafbaa);
+}
+
+@font-face {
+  font-family: 'OldLondon';
+  src: url('/public/fonts/OldLondon.woff');
 }
