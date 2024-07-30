@@ -52,6 +52,5 @@ export default function Philosphies() {
         />
       </div>
     </div>
-
   )
 }
