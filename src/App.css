@@ -2,18 +2,3 @@
   text-align: center;
   background-color: #121419;
 }
-
-.logo {
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 8em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 8em #61dafbaa);
-}
-
-.read-the-docs {
-  color: #888;
-}

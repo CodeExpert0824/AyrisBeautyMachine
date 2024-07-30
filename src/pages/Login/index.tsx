@@ -12,8 +12,10 @@ export default function Login() {
   const [mediumBtn, setMediumBtn] = useState({ horizontal: 0, vertical: 0 });
   const [smallBtn, setSmallBtn] = useState({ horizontal: 0, vertical: 0 });
   const [actionBtnSize, setActionBtnSize] = useState({ horizontal: 0, vertical: 0 });
+  const [inputSize, setInputSize] = useState({ horizontal: 0, vertical: 0, fontSize: 0 });
+  const [userName, setUserName] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const login = useAuthStore((state) => state.login);
 
   const updatePadding = () => {
@@ -26,6 +28,11 @@ export default function Login() {
       setMediumBtn({ horizontal: ref.current.offsetWidth * 0.048, vertical: ref.current.offsetHeight * 0.019 });
       setSmallBtn({ horizontal: ref.current.offsetWidth * 0.032, vertical: ref.current.offsetHeight * 0.016 });
       setActionBtnSize({ horizontal: ref.current.offsetWidth * 0.04, vertical: ref.current.offsetHeight * 0.015 });
+      setInputSize({
+        horizontal: ref.current.offsetWidth * 0.077,
+        vertical: ref.current.offsetHeight * 0.051,
+        fontSize: ref.current.offsetWidth * 0.01,
+      });
     }
   };
 
@@ -66,15 +73,11 @@ export default function Login() {
   return (
     <div className="flex flex-row justify-center">
       <div className="relative" ref={ref}>
-        {isAuthenticated ? <img
-          src="/images/login_2.png"
-          alt="background"
-          className="h-full -z-40 min-h-screen"
-        /> : <img
+        <img
           src="/images/login.png"
           alt="background"
           className="h-full -z-40 min-h-screen"
-        />}
+        />
         <Link
           className="absolute top-[18.2%] left-[4.2%] bg-slate-400 opacity-10 hover:opacity-10"
           to='/home'
@@ -96,32 +99,20 @@ export default function Login() {
             padding: `${buildBtnSize.vertical}px ${buildBtnSize.horizontal}px`,
           }}
         />
-        {isAuthenticated ? <>
-          <Link
-            className="absolute top-[18.35%] left-[90%] bg-slate-400 opacity-10 hover:opacity-10"
-            to='/account'
-            style={{
-              padding: `${squareBtnWidth.vertical}px ${squareBtnWidth.horizontal}px`,
-            }}
-          />
-        </> : (
-          <>
-            <Link
-              className="absolute top-[18.35%] left-[90%] bg-slate-400 opacity-10 hover:opacity-10"
-              to='/register'
-              style={{
-                padding: `${authBtnSize.vertical}px ${authBtnSize.horizontal}px`,
-              }}
-            />
-            <Link
-              className="absolute top-[22.4%] left-[90%] bg-slate-400 opacity-10 hover:opacity-10"
-              to='/login'
-              style={{
-                padding: `${authBtnSize.vertical}px ${authBtnSize.horizontal}px`,
-              }}
-            />
-          </>
-        )}
+        <Link
+          className="absolute top-[18.35%] left-[90%] bg-slate-400 opacity-10 hover:opacity-10"
+          to='/register'
+          style={{
+            padding: `${authBtnSize.vertical}px ${authBtnSize.horizontal}px`,
+          }}
+        />
+        <Link
+          className="absolute top-[22.4%] left-[90%] bg-slate-400 opacity-10 hover:opacity-10"
+          to='/login'
+          style={{
+            padding: `${authBtnSize.vertical}px ${authBtnSize.horizontal}px`,
+          }}
+        />
         <Link
           className="absolute top-[37%] left-[3.5%] bg-slate-400 opacity-10 hover:opacity-10"
           to='/year'
@@ -191,6 +182,20 @@ export default function Login() {
           style={{
             padding: `${squareBtnWidth.vertical}px ${squareBtnWidth.horizontal}px`,
           }}
+        />
+        <input
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
+          placeholder="User Name"
+          className="absolute top-[40.8%] left-[46.1%] bg-transparent text-center placeholder-red-600 text-red-600 outline-none"
+          style={{ width: `${inputSize.horizontal}px`, height: `${inputSize.vertical}px`, fontSize: `${inputSize.fontSize}px` }}
+        />
+        <input
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password"
+          className="absolute top-[58.5%] left-[46.1%] bg-transparent text-center placeholder-red-600 text-red-600 outline-none"
+          style={{ width: `${inputSize.horizontal}px`, height: `${inputSize.vertical}px`, fontSize: `${inputSize.fontSize}px` }}
         />
         <div
           className="absolute top-[67.5%] left-[35.4%] bg-slate-400 opacity-10 hover:opacity-10 cursor-pointer"
