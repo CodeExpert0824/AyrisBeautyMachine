@@ -1,5 +1,6 @@
 import Splash from "../pages/Splash";
 import Introduction from '../pages/Introduction';
+import Demo from '../pages/Demo';
 import Home from '../pages/Home';
 import Register from "../pages/Register";
 import Login from "../pages/Login";
@@ -26,6 +27,11 @@ const coreRoutes = [
     path: '/introduction',
     title: 'Introduction',
     component: Introduction
+  },
+  {
+    path: '/demo',
+    title: 'Demo',
+    component: Demo
   },
   {
     path: '/home',

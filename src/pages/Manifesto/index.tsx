@@ -52,6 +52,5 @@ export default function Manifesto() {
         />
       </div>
     </div>
-
   )
 }
