@@ -40,7 +40,7 @@ export default function Muthology() {
         <img
           src="/images/muthology.png"
           alt="background"
-          className="h-full -z-40"
+          className="h-full -z-40 min-h-screen"
           ref={imgRef}
         />
         <Link
