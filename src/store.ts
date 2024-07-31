@@ -3,14 +3,14 @@ import { persist } from 'zustand/middleware';
 
 interface AuthState {
   isAuthenticated: boolean;
-  login: () => void;
+  setAuthenticate: () => void;
 }
 
 const useAuthStore = create<AuthState>()(
   persist(
     (set: (partial: Partial<AuthState>) => void) => ({
       isAuthenticated: false,
-      login: () => set({ isAuthenticated: true }),
+      setAuthenticate: () => set({ isAuthenticated: true }),
     }),
     {
       name: 'auth-storage',

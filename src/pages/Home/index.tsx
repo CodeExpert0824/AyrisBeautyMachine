@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { getAuth, signOut } from "firebase/auth";
+import { toast } from "react-toastify";
 import useAuthStore from "../../store";
 
 export default function Home() {
+  const navigate = useNavigate();
   const ref = useRef<HTMLDivElement | null>(null);
   const [authBtnWidth, setAuthBtnWidth] = useState({ horizontal: 0, vertical: 0 });
   const [buildBtnSize, setBuildBtnSize] = useState({ horizontal: 0, vertical: 0 });
@@ -11,6 +14,7 @@ export default function Home() {
   const [commonBtn, setCommonBtn] = useState({ horizontal: 0, vertical: 0 });
   const [mediumBtn, setMediumBtn] = useState({ horizontal: 0, vertical: 0 });
   const [smallBtn, setSmallBtn] = useState({ horizontal: 0, vertical: 0 });
+  const [authBtnSize, setAuthBtnSize] = useState({ horizontal: 0, vertical: 0, fontSize: 0 });
 
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
@@ -23,8 +27,21 @@ export default function Home() {
       setCommonBtn({ horizontal: ref.current.offsetWidth * 0.0385, vertical: ref.current.offsetHeight * 0.0043 });
       setMediumBtn({ horizontal: ref.current.offsetWidth * 0.048, vertical: ref.current.offsetHeight * 0.0046 });
       setSmallBtn({ horizontal: ref.current.offsetWidth * 0.032, vertical: ref.current.offsetHeight * 0.0043 });
+      setAuthBtnSize({ horizontal: ref.current.offsetWidth * 0.061, vertical: ref.current.offsetHeight * 0.011, fontSize: ref.current.offsetHeight * 0.006 })
     }
   };
+
+  const handleLogout = async () => {
+    const auth = getAuth();
+    try {
+      await signOut(auth);
+      toast.success("User logout successfully");
+      localStorage.removeItem('auth-storage');
+      navigate("/login");
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   useEffect(() => {
     const handleResize = () => updatePadding();
@@ -91,12 +108,25 @@ export default function Home() {
       />
       {isAuthenticated ? <>
         <Link
-          className="absolute top-[5%] left-[90%] bg-slate-400 opacity-10 hover:opacity-10"
+          className="absolute top-[5.05%] left-[90%] text-center"
           to='/account'
           style={{
-            padding: `${squareBtnWidth.vertical}px ${squareBtnWidth.horizontal}px`,
+            width: `${authBtnSize.horizontal}px`,
+            height: `${authBtnSize.vertical}px`
           }}
-        />
+        >
+          <span className="text-red-600" style={{ fontSize: `${authBtnSize.fontSize}px` }}>Account</span>
+        </Link>
+        <button
+          className="absolute top-[6.1%] left-[90%] text-center"
+          style={{
+            width: `${authBtnSize.horizontal}px`,
+            height: `${authBtnSize.vertical}px`
+          }}
+          onClick={handleLogout}
+        >
+          <span className="text-red-600" style={{ fontSize: `${authBtnSize.fontSize}px` }}>Log out</span>
+        </button>
       </> : (
         <>
           <Link

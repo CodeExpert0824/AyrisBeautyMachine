@@ -1,8 +1,15 @@
 import { useRef, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Formik } from "formik";
+import * as Yup from 'yup';
+import { toast } from 'react-toastify';
+import { getDocs, collection, query, where } from 'firebase/firestore';
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { firebaseAuth, firebaseDB } from "../../utils/firebaseConfig";
 import useAuthStore from "../../store";
 
 export default function Login() {
+  const navigate = useNavigate();
   const ref = useRef<HTMLDivElement | null>(null);
   const [authBtnSize, setAuthBtnSize] = useState({ horizontal: 0, vertical: 0 });
   const [buildBtnSize, setBuildBtnSize] = useState({ horizontal: 0, vertical: 0 });
@@ -13,10 +20,8 @@ export default function Login() {
   const [smallBtn, setSmallBtn] = useState({ horizontal: 0, vertical: 0 });
   const [actionBtnSize, setActionBtnSize] = useState({ horizontal: 0, vertical: 0 });
   const [inputSize, setInputSize] = useState({ horizontal: 0, vertical: 0, fontSize: 0 });
-  const [userName, setUserName] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
 
-  const login = useAuthStore((state) => state.login);
+  const setAuthenticate = useAuthStore((state) => state.setAuthenticate);
 
   const updatePadding = () => {
     if (ref.current) {
@@ -34,6 +39,16 @@ export default function Login() {
         fontSize: ref.current.offsetWidth * 0.01,
       });
     }
+  };
+
+  const fetchEmailByUserName = async (userName: string) => {
+    const usersRef = collection(firebaseDB, 'users');
+    const querySnapShot = await getDocs(query(usersRef, where('userName', '==', userName)));
+    if (!querySnapShot.empty) {
+      const userData = querySnapShot.docs[0].data();
+      return userData.email;
+    }
+    return null;
   };
 
   useEffect(() => {
@@ -183,26 +198,81 @@ export default function Login() {
             padding: `${squareBtnWidth.vertical}px ${squareBtnWidth.horizontal}px`,
           }}
         />
-        <input
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
-          placeholder="User Name"
-          className="absolute top-[40.8%] left-[46.1%] bg-transparent text-center placeholder-red-600 text-red-600 outline-none"
-          style={{ width: `${inputSize.horizontal}px`, height: `${inputSize.vertical}px`, fontSize: `${inputSize.fontSize}px` }}
-        />
-        <input
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          className="absolute top-[58.5%] left-[46.1%] bg-transparent text-center placeholder-red-600 text-red-600 outline-none"
-          style={{ width: `${inputSize.horizontal}px`, height: `${inputSize.vertical}px`, fontSize: `${inputSize.fontSize}px` }}
-        />
-        <div
-          className="absolute top-[67.5%] left-[35.4%] bg-slate-400 opacity-10 hover:opacity-10 cursor-pointer"
-          style={{
-            padding: `${actionBtnSize.vertical}px ${actionBtnSize.horizontal}px`,
+        <Formik
+          initialValues={{
+            userName: '',
+            password: ''
           }}
-          onClick={() => { login() }} />
+          validationSchema={Yup.object().shape({
+            userName: Yup.string()
+              .required('UserName is required')
+              .max(255, 'User Name must be at most 255 characters'),
+            password: Yup.string()
+              .required('Password is required')
+              .min(6, 'Password must be at least 6 characters')
+              .max(255, 'Password must be at most 255 characters')
+          })}
+          onSubmit={async (values, { setSubmitting }) => {
+            try {
+              const email = await fetchEmailByUserName(values.userName);
+              if (email) {
+                await signInWithEmailAndPassword(firebaseAuth, email, values.password);
+                toast.success('Login successful');
+                setAuthenticate();
+                navigate('/home');
+              } else {
+                toast.error('User not found');
+              }
+            } catch (err) {
+              console.log(err);
+              toast.error('Error occurred during login');
+            } finally {
+              setSubmitting(false);
+            }
+          }}
+        >
+          {({ handleBlur, handleChange, handleSubmit, values, errors }) => (
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit();
+              const errorOrder: Array<keyof typeof values> = ['userName', 'password'];
+              for (const key of errorOrder) {
+                if (errors[key]) {
+                  toast.error(errors[key]);
+                  break;
+                }
+              }
+            }}>
+              <input
+                type="text"
+                name="userName"
+                value={values.userName}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                placeholder="User Name"
+                className="absolute top-[40.8%] left-[46.1%] bg-transparent text-center placeholder-red-600 text-red-600 outline-none"
+                style={{ width: `${inputSize.horizontal}px`, height: `${inputSize.vertical}px`, fontSize: `${inputSize.fontSize}px` }}
+              />
+              <input
+                type="password"
+                name="password"
+                value={values.password}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                placeholder="Password"
+                className="absolute top-[58.5%] left-[46.1%] bg-transparent text-center placeholder-red-600 text-red-600 outline-none"
+                style={{ width: `${inputSize.horizontal}px`, height: `${inputSize.vertical}px`, fontSize: `${inputSize.fontSize}px` }}
+              />
+              <button
+                type="submit"
+                className="absolute top-[67.5%] left-[35.4%] bg-slate-400 opacity-10 hover:opacity-10 cursor-pointer"
+                style={{
+                  padding: `${actionBtnSize.vertical}px ${actionBtnSize.horizontal}px`,
+                }}
+              />
+            </form>
+          )}
+        </Formik>
       </div>
     </div>
   );

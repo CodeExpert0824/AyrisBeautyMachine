@@ -1,7 +1,7 @@
 export default function Splash() {
   return (
     <>
-      <a href="/help" className="flex flex-row justify-center">
+      <a href="/introduction" className="flex flex-row justify-center">
         <img src="/images/splash-page.jpeg" className="h-screen logo" alt="logo" />
       </a>
     </>

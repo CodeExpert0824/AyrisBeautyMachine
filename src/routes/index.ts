@@ -1,5 +1,5 @@
 import Splash from "../pages/Splash";
-import Help from '../pages/Help';
+import Introduction from '../pages/Introduction';
 import Home from '../pages/Home';
 import Register from "../pages/Register";
 import Login from "../pages/Login";
@@ -23,9 +23,9 @@ const coreRoutes = [
     component: Splash
   },
   {
-    path: '/help',
-    title: 'Help',
-    component: Help
+    path: '/introduction',
+    title: 'Introduction',
+    component: Introduction
   },
   {
     path: '/home',
