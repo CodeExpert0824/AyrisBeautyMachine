@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
+import Modal from "../../base_components/Modal";
 
 export default function Help() {
   const imgRef = useRef<HTMLImageElement | null>(null);
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [btnSize, setBtnSize] = useState({ horizontal: 0, vertical: 0 });
   const [unfoldBtnSize, setUnfoldBtnSize] = useState({ horizontal: 0, vertical: 0 });
   const [muthologyBtnSize, setMuthologyBtnSize] = useState({ horizontal: 0, vertical: 0 });
@@ -98,6 +100,7 @@ export default function Help() {
           style={{
             padding: `${unfoldBtnSize.vertical}px ${unfoldBtnSize.horizontal}px`,
           }}
+          onClick={() => {setModalOpen(true)}}
         />
         <Link
           className="absolute top-[65.3%] left-[10%] bg-transparent"
@@ -115,11 +118,12 @@ export default function Help() {
         />
         <Link
           className="absolute top-[92.5%] left-[42.9%] bg-transparent"
-          to="/home"
+          to="/demo"
           style={{
             padding: `${btnSize.vertical}px ${btnSize.horizontal}px`,
           }}
         />
+        <Modal isOpen={isModalOpen} onClose={() => {setModalOpen(false)}} />
       </div>
     </div >
   )
