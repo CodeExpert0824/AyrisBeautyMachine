@@ -2,11 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import { toast } from "react-toastify";
+import PdfViewer from "../../base_components/PdfViewer";
 import useAuthStore from "../../store";
 
 export default function Home() {
   const navigate = useNavigate();
   const ref = useRef<HTMLDivElement | null>(null);
+  const [showManifesto, setShowManifesto] = useState<boolean>(false);
+  const [showMythology, setShowMythology] = useState<boolean>(false);
   const [authBtnWidth, setAuthBtnWidth] = useState({ horizontal: 0, vertical: 0 });
   const [buildBtnSize, setBuildBtnSize] = useState({ horizontal: 0, vertical: 0 });
   const [squareBtnWidth, setSquareBtnWidth] = useState({ horizontal: 0, vertical: 0 });
@@ -173,19 +176,19 @@ export default function Home() {
           padding: `${commonBtn.vertical}px ${commonBtn.horizontal}px`,
         }}
       />
-      <Link
+      <button
         className="absolute top-[14.8%] left-[3.5%] bg-slate-400 opacity-10 hover:opacity-10"
-        to='/muthology'
         style={{
           padding: `${commonBtn.vertical}px ${commonBtn.horizontal}px`,
         }}
+        onClick={() => { setShowMythology(true) }}
       />
-      <Link
+      <button
         className="absolute top-[21.4%] left-[4.3%] bg-slate-400 opacity-10 hover:opacity-10"
-        to='/manifesto'
         style={{
           padding: `${squareBtnWidth.vertical}px ${squareBtnWidth.horizontal}px`,
         }}
+        onClick={() => { setShowManifesto(true) }}
       />
       <Link
         className="absolute top-[23.9%] left-[20.3%] bg-slate-400 opacity-10 hover:opacity-10"
@@ -215,6 +218,8 @@ export default function Home() {
           padding: `${squareBtnWidth.vertical}px ${squareBtnWidth.horizontal}px`,
         }}
       />
+      <PdfViewer fileURL="/public/pdfs/manifesto.pdf" isOpen={showManifesto} onClose={() => { setShowManifesto(false) }} />
+      <PdfViewer fileURL="/public/pdfs/mythology.pdf" isOpen={showMythology} onClose={() => { setShowMythology(false) }} />
     </div>
   );
 }

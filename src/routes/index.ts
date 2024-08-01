@@ -12,8 +12,6 @@ import Year from "../pages/Year";
 import EraStyle from "../pages/EraStyle";
 import Location from "../pages/Location";
 import Philosphies from "../pages/Philosphies";
-import Muthology from "../pages/Muthology";
-import Manifesto from "../pages/Manifesto";
 import EditProfile from "../pages/EditProfile";
 import ThirdDimension from "../pages/ThirdDimension";
 
@@ -82,16 +80,6 @@ const coreRoutes = [
     path: '/philosphies',
     title: 'Philosphies',
     component: Philosphies
-  },
-  {
-    path: '/muthology',
-    title: 'Muthology',
-    component: Muthology
-  },
-  {
-    path: '/manifesto',
-    title: 'Manifesto',
-    component: Manifesto
   },
   {
     path: '/edit-profile',
