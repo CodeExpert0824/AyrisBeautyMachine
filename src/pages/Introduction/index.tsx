@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
+import PdfViewer from "../../base_components/PdfViewer";
 import Modal from "../../base_components/Modal";
 
 export default function Help() {
@@ -10,6 +11,9 @@ export default function Help() {
   const [muthologyBtnSize, setMuthologyBtnSize] = useState({ horizontal: 0, vertical: 0 });
   const [introRectSize, setIntroRectSize] = useState({ horizontal: 0, vertical: 0 });
   const [videoRectSize, setVideoRectSize] = useState({ horizontal: 0, vertical: 0 });
+
+  const [showManifesto, setShowManifesto] = useState<boolean>(false);
+  const [showMythology, setShowMythology] = useState<boolean>(false);
 
   const updatePadding = () => {
     if (imgRef.current) {
@@ -100,21 +104,21 @@ export default function Help() {
           style={{
             padding: `${unfoldBtnSize.vertical}px ${unfoldBtnSize.horizontal}px`,
           }}
-          onClick={() => {setModalOpen(true)}}
+          onClick={() => { setModalOpen(true) }}
         />
-        <Link
+        <button
           className="absolute top-[65.3%] left-[10%] bg-transparent"
-          to="/manifesto"
           style={{
             padding: `${btnSize.vertical}px ${btnSize.horizontal}px`,
           }}
+          onClick={() => { setShowManifesto(true) }}
         />
-        <Link
+        <button
           className="absolute top-[65.3%] left-[72.7%] bg-transparent"
-          to="/muthology"
           style={{
             padding: `${muthologyBtnSize.vertical}px ${muthologyBtnSize.horizontal}px`,
           }}
+          onClick={() => { setShowMythology(true) }}
         />
         <Link
           className="absolute top-[92.5%] left-[42.9%] bg-transparent"
@@ -123,7 +127,9 @@ export default function Help() {
             padding: `${btnSize.vertical}px ${btnSize.horizontal}px`,
           }}
         />
-        <Modal isOpen={isModalOpen} onClose={() => {setModalOpen(false)}} />
+        <Modal isOpen={isModalOpen} onClose={() => { setModalOpen(false) }} />
+        <PdfViewer fileURL="/public/pdfs/manifesto.pdf" isOpen={showManifesto} onClose={() => { setShowManifesto(false) }} />
+        <PdfViewer fileURL="/public/pdfs/mythology.pdf" isOpen={showMythology} onClose={() => { setShowMythology(false) }} />
       </div>
     </div >
   )
