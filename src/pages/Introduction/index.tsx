@@ -128,8 +128,8 @@ export default function Help() {
           }}
         />
         <Modal isOpen={isModalOpen} onClose={() => { setModalOpen(false) }} />
-        <PdfViewer fileURL="/public/pdfs/manifesto.pdf" isOpen={showManifesto} onClose={() => { setShowManifesto(false) }} />
-        <PdfViewer fileURL="/public/pdfs/mythology.pdf" isOpen={showMythology} onClose={() => { setShowMythology(false) }} />
+        <PdfViewer fileURL="/pdfs/manifesto.pdf" isOpen={showManifesto} onClose={() => { setShowManifesto(false) }} />
+        <PdfViewer fileURL="/pdfs/mythology.pdf" isOpen={showMythology} onClose={() => { setShowMythology(false) }} />
       </div>
     </div >
   )
